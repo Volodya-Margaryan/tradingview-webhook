@@ -304,6 +304,32 @@ negative results, not just the wins:
   gap-fade, volume-confirmed gaps). Documented here deliberately even though
   none of them beat the trend-following baseline: the point of a real
   research process is ruling things out, not just reporting what worked.
+- **`backtest_notp.py`** — the strongest result found: the bracket entry
+  with the take-profit cap removed entirely, letting winners run until the
+  trend itself breaks down instead of exiting at a fixed target.
+- **`backtest_scaleout.py` / `backtest_scaleout75.py`** — investigates a
+  natural follow-up question (why is win rate under 50%?) by splitting each
+  entry into a capped tranche plus an uncapped runner, at two different
+  capped/uncapped ratios. Confirms win rate and total return trade off
+  against each other directly — every attempt to raise win rate lowered
+  both total profit and profit factor, with no configuration clearing 50%
+  while staying meaningfully profitable.
+
+### Headline result (`backtest_notp.py`, 14 independent ~6-month windows, 2018–2026)
+
+| Metric | Value |
+|---|---|
+| Net P&L, all 14 periods combined | **+$1,022.09** |
+| Periods profitable | 9 / 14 |
+| Total closed trades | 927 |
+| Win rate | 35.9% |
+| Profit factor | 1.40 |
+| Max capital at risk | $2,000 (verified from the trade ledger, never exceeded) |
+| Trading costs modeled | 10 basis points on every fill, both directions |
+
+Full period-by-period breakdown, the losing alternatives, and the
+win-rate/profit-factor trade-off analysis are in the docstrings and stdout
+output of the scripts above — run any of them directly to reproduce.
 
 Run any of them directly, e.g.:
 
