@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-"""Short-term variant of backtest_regime.py, per an explicit ask to change the
-strategy: weekly (5-trading-day) lookback instead of 20-day, no cap on
-concurrent position COUNT, an expanded universe including crypto (which
-trades 7 days/week, unlike equities), and a hard $3,000 TOTAL dollar cap on
-capital deployed at once (split into ~$150 slices so ~20 positions can fit
-under that cap instead of a handful of large ones).
+"""Short-term variant of the trend-following regime strategy: a 5-day
+(weekly) lookback instead of 20 days, no cap on concurrent position count,
+an expanded universe including crypto (which trades 7 days a week, unlike
+equities), and a $3,000 total dollar cap on capital deployed at once, split
+into ~$150 slices so up to ~20 positions can be held concurrently.
 
-Because sizing is now a fixed-dollar-slice-under-a-total-cap scheme rather
-than the live system's %-of-equity risk sizing, this bypasses risk.py's
-size_position() entirely and implements its own sizing -- still using
-storage.py for persistence (so results show up in the dashboard the same
-way), just not paper_engine.py's position-opening logic. Runs against its
-own isolated DB, separate from both the live paper account and the earlier
-6-month regime backtest.
+Sizing here is a fixed-dollar-slice-under-a-total-cap scheme rather than
+the live system's percent-of-equity risk sizing, so this bypasses the risk
+engine's size_position() function entirely and implements its own sizing,
+while still using the storage layer for persistence (so results display in
+the standard dashboard). Runs against its own isolated DB.
 """
 from __future__ import annotations
 

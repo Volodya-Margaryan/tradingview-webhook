@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Run the EXACT SAME bracket-exit strategy (20-day entry window, 5%
-threshold, SMA20>SMA50, -3% stop / +6% target, $3,000 total cap, 10bps
-realistic friction) across multiple independent, non-overlapping 6-month
-historical windows -- no re-tuning, just checking whether the one result we
-had is stable or was a one-time fluke on a favorable stretch.
+"""Runs the bracket-exit strategy (20-day entry window, 5% threshold,
+SMA20>SMA50, -3% stop / +6% target, $3,000 total cap, 10bps friction)
+across multiple independent, non-overlapping ~6-month historical windows,
+to check whether a result is stable across different market conditions
+rather than specific to a single favorable stretch.
 
-Each period gets its own isolated DB and its own dashboard port, so every
-buy/sell -- real symbol, real date, real price, real dollar amount spent --
-is independently inspectable and verifiable in the browser.
+Each period gets its own isolated SQLite DB and can be served on its own
+dashboard port, so every trade -- symbol, date, price, dollar amount -- is
+independently inspectable.
 """
 from __future__ import annotations
 

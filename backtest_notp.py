@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-"""Variant of backtest_bracket_intraday.py testing one specific hypothesis:
-does removing the +6% take-profit (and letting winners run until the
-regime itself flips) improve on the bracket-exit result? Everything else
-identical -- same 14 periods, same $2,000 cap, same intraday-aware (High/Low)
--3% stop-loss, same entry signal. Only the take-profit exit is removed.
+"""Bracket-exit strategy with the take-profit removed: positions exit only
+on a -3% stop-loss (checked against each day's intraday High/Low) or a
+trend reversal -- there is no fixed profit target, so a winning position
+keeps running for as long as the trend holds.
 
-Motivation: comparing the close-only and intraday-aware runs showed the
-take-profit was capping some large winners early (one TSLA trade went from
-+5.89% capped to +19.66% when held) -- this isolates whether removing it
-nets out positive once you also expose more capital to more downside time.
+Same 14-period structure, $2,000 total cap, and entry signal as
+backtest_bracket_intraday.py; only the take-profit exit is removed.
 """
 from __future__ import annotations
 

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Bracket-exit variant: same proven entry signal (20-day window, 5%
-threshold, SMA20>SMA50 -- the only combination that's actually shown a real
-edge across every test so far), but replaces the slow "wait for the regime
-to officially flip" exit with a hard stop-loss + take-profit checked every
-day. This is the actual lever for "less risk, faster money": losses get cut
-at -3% instead of riding out a reversal, wins get locked in at +6% instead
-of waiting weeks for the trend to exhaust. Regime-flip exit remains as a
-fallback for positions that drift sideways without hitting either level.
+"""Bracket-exit strategy: trend entry (20-day rolling return above +5%,
+price above both its 20- and 50-day moving average) combined with a fixed
+stop-loss and take-profit, checked once per day against the closing price.
 
-$3,000 total cap, $300 slices (10 slots), same 18-symbol blue-chip universe
-that worked (broadening it made things worse in every prior test).
-Isolated DB, separate from live trading and all four prior backtests.
+Exit rules, whichever triggers first:
+  - -3% stop-loss
+  - +6% take-profit
+  - trend reversal (price falls back below its moving averages)
+
+$3,000 total capital cap, ten $300 slices, 18-symbol liquid large-cap
+universe. Runs against an isolated SQLite DB, separate from the live paper
+account.
 """
 from __future__ import annotations
 

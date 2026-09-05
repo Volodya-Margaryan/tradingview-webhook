@@ -1,22 +1,12 @@
 #!/usr/bin/env python3
-"""Real day trading: every position opens and closes on the SAME calendar
-day -- zero overnight exposure, unlike every prior strategy tested (all of
-which held positions across multiple days).
+"""Same-day trading strategy, narrowed on two axes: restricted to the 8
+most liquid mega-cap symbols (day trading is more sensitive to trading
+costs than a multi-week hold, since the edge per trade is smaller to begin
+with), and a larger 2% gap threshold instead of 1%, filtering for gaps
+large enough to reflect a real catalyst rather than routine daily noise.
 
-Honesty on data: true minute-by-minute intraday backtesting only works for
-the last ~60 days from this data source. This design only needs each day's
-Open and Close (available for the full 8 years), so it can be tested
-properly across all 14 periods without that limitation.
-
-Strategy: same gap-up + volume-confirmation + intraday-stop entry as
-backtest_daytrade_stopped.py (which lost -$136.08 over 8 years -- smaller
-loss than every prior variant, but still negative), narrowed further on two
-axes at once: (1) universe restricted to only the 8 most liquid mega-caps
-(day trading eats trading costs proportionally harder than a multi-week
-hold does, since the whole edge per trade is smaller to begin with -- tight
-spreads matter more here), and (2) the gap threshold raised from 1% to 2%,
-filtering for gaps large enough to reflect a real catalyst instead of
-routine daily noise.
+Builds on the gap-up + volume-confirmation + intraday-stop entry used in
+backtest_daytrade_stopped.py.
 
 Same $2,000 total cap, $200 slices, same 14 periods, 10bps friction each way.
 """

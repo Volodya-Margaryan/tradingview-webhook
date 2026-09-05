@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-"""Same bracket-exit strategy, same 14 periods, same $2,000 cap -- but the
-stop-loss/take-profit check now uses each day's actual High/Low instead of
-only the closing price. This is the fix for the diagnosed problem: a
-close-only check can miss a stop that was touched and blown through
-mid-day (the TSLA -19% cases), because it only ever looks at where the
-price ended up at 4pm, not what happened in between.
+"""Bracket-exit strategy with intraday-aware stop/target checking: the
+stop-loss and take-profit are checked against each day's actual High/Low,
+not just the closing price, so a level that is touched and reverses within
+the same day is caught correctly instead of only being detected if it's
+still breached at the close.
 
-True tick-by-tick intraday data isn't available this far back from Yahoo
-(minute/hour bars only go back ~60 days) -- using the day's High/Low is the
-best available approximation across 8 years of history, and is strictly
-more accurate than N discrete same-day checks would be, since it captures
-the actual extreme rather than samples that might miss it.
+True minute-by-minute intraday data isn't available this far back from
+Yahoo Finance (only about 60 days of history at that resolution); using
+each day's High/Low is the best available approximation across a
+multi-year backtest, and is more accurate than a close-only check, which
+can miss a stop that was breached and partially recovered within the same
+session.
 
-Fill logic: if the Low breaches the stop, fill at the stop price -- unless
-the day's Open already gapped past it, in which case fill at the Open
-(can't get a better price than what the market opened at). Same logic in
-reverse for the take-profit against the High. If both are touched the same
-day, stop-loss is assumed to trigger first (conservative, since OHLC alone
-can't tell us the real intraday order).
+Fill logic: if the day's Low breaches the stop, fill at the stop price, or
+at the Open if the market gapped past it already. Mirror logic applies to
+the take-profit against the High. If both levels are touched on the same
+day, the stop-loss is assumed to trigger first (a conservative assumption,
+since daily OHLC data alone can't establish the actual intraday sequence).
+
+Same $2,000 total cap and 18-symbol universe as the other bracket variants.
 """
 from __future__ import annotations
 

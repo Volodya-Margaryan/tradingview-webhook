@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""Grid-search the bracket strategy's stop-loss/take-profit levels, then check
-whether the winner is a real edge or just curve-fit using the pbo-deflated-sharpe
-skill (PBO via CSCV + Deflated Sharpe Ratio) -- before trusting it.
+"""Grid-search of the bracket strategy's stop-loss/take-profit levels,
+paired with an overfitting check -- Probability of Backtest Overfitting
+and Deflated Sharpe Ratio, via combinatorially-symmetric cross-validation
+-- to determine whether the best-looking configuration reflects a real
+edge or is a product of trying many parameter combinations.
 
-Split: oldest 6 months = TRAIN (grid search happens only here). Most recent
-6 months = TEST (the exact window backtest_bracket.py has been using all
-along) -- the winning config gets one, single, honest run there, never
-peeked at during the search. This is the actual point: if the "improved"
-config only won on the eval window, that's overfitting, not improvement.
+Data is split into a training window (the oldest 6 months, where the grid
+search runs) and a held-out test window (the most recent 6 months, used
+only once to evaluate the chosen configuration and never referenced during
+the search). This isolates whether an "improved" configuration generalizes
+or was only tuned to fit the training window.
 
-In-memory simulation only (no DB writes) for speed across many trials; only
-the final chosen config gets replayed through the real storage/paper engine
-for dashboard viewing, same as every other backtest script here.
+Grid-search trials run as an in-memory simulation (no DB writes) for
+speed; only the final chosen configuration is replayed through the
+storage/paper-engine layer for dashboard viewing, matching the other
+backtest scripts in this project.
 """
 from __future__ import annotations
 

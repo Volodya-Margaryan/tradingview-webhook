@@ -1,24 +1,12 @@
 #!/usr/bin/env python3
-"""Real day trading: every position opens and closes on the SAME calendar
-day -- zero overnight exposure, unlike every prior strategy tested (all of
-which held positions across multiple days).
+"""Same-day trading strategy: gap-up entry with volume confirmation (as in
+backtest_daytrade_volconfirm.py), plus an intraday stop-loss. If the day's
+Low breaches STOP_LOSS_PCT below the entry (today's Open), the position
+exits immediately rather than riding out the full day to the close -- this
+bounds the worst-case loss on any single trade, not just the average case.
 
-Honesty on data: true minute-by-minute intraday backtesting only works for
-the last ~60 days from this data source. This design only needs each day's
-Open and Close (available for the full 8 years), so it can be tested
-properly across all 14 periods without that limitation.
-
-Strategy: same gap-up + volume-confirmation entry as backtest_daytrade_volconfirm.py
-(which lost -$247.78 over 8 years -- less bad than the unfiltered versions,
-but still negative and with some very bad individual periods), PLUS an
-intraday stop-loss this version was missing entirely: previously a bad day
-rode all the way to the close no matter how far it fell. Now, if the day's
-Low breaches STOP_LOSS_PCT below the entry (today's Open), exit right there
-instead of waiting for the close. This targets the worst-case days
-specifically, not the average case.
-
-Same $2,000 total cap, $200 slices, same 18-symbol universe, same 14
-periods, 10bps friction each way.
+$2,000 total cap, $200 slices, 18-symbol universe, 14 periods, 10bps
+friction each way.
 """
 from __future__ import annotations
 

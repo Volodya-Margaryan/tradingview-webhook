@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Walk-forward backtest of the regime+news-guard strategy over real
-historical daily prices, reusing the exact same risk/paper-engine code as
-live trading (1% risk/trade, 10-position cap, no pyramiding) -- but against
-a fully isolated, throwaway SQLite DB so it never touches the live paper
-account used for real-time testing.
+"""Walk-forward backtest of a trend-following regime strategy over real
+historical daily prices, reusing the same risk/paper-engine code as live
+trading (1% risk per trade, 10-position cap, no pyramiding), against a
+fully isolated, throwaway SQLite DB that never touches the live paper
+account.
 
-No lookahead: on each simulated day, the regime signal only uses price data
-up to and including that day.
+No lookahead: each simulated day's regime signal only uses price data up
+to and including that day.
 
-Known limitation: risk.py's daily-loss circuit breaker filters "closed in
-the last 24h" by wall-clock time, not simulated date, so it isn't temporally
-accurate during a replay (it can't halt trading on a historically bad day
-the way it would live). Position cap and per-trade risk sizing are both
-still enforced correctly since those aren't time-windowed.
+Known limitation: the risk engine's daily-loss circuit breaker filters
+"closed in the last 24h" by wall-clock time, not simulated date, so it
+isn't temporally accurate during a historical replay (it can't halt
+trading on a specific bad day the way it would live). The position cap and
+per-trade risk sizing are both still enforced correctly, since neither is
+time-windowed.
 
 Usage:
     .venv/bin/python backtest_regime.py [--period 6mo] [--symbols NVDA,MSFT,...]

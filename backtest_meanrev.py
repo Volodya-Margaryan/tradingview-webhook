@@ -1,25 +1,20 @@
 #!/usr/bin/env python3
-"""A genuinely different strategy, not a re-tuned version of the trend-follower:
-short-term mean-reversion instead of trend-following. The 20-day trend
-strategy needs weeks/months for a trend to play out -- that's structural,
-not a parameter problem. To actually target short holds, the entry logic
-itself has to be about short-term moves, not long-term trend.
+"""Short-term mean-reversion strategy: buys a sharp pullback within an
+established uptrend and forces an exit within a fixed number of days,
+rather than following a trend for as long as it lasts.
 
-Entry: price is above its 50-day SMA (still a real uptrend, not a falling
-knife) AND has dropped >= 4% over the last 3 trading days (a sharp
-short-term pullback worth buying into strength).
+Entry: price is above its 50-day moving average (a real uptrend, not a
+falling knife) and has dropped at least 4% over the last 3 trading days.
 
 Exit, whichever comes first:
   - +4% bounce (take-profit)
   - -3% stop-loss
-  - 5 trading days elapsed, forced exit regardless of price (this is what
-    actually guarantees short holds, unlike the trend strategy's open-ended
-    regime-flip exit)
+  - 5 trading days elapsed (a forced time exit, guaranteeing a short hold
+    regardless of price)
 
-Same $2,000 total cap ($200 slices, 10 slots), same 18-symbol universe,
-same 14 non-overlapping ~6-month periods (2018-2026) for direct comparison
-to every prior test. Intraday-aware (High/Low) stop/target checking, 10bps
-friction, same as the best-performing version so far.
+$2,000 total cap ($200 slices, 10 slots), 18-symbol universe, 14
+non-overlapping ~6-month periods (2018-2026), intraday-aware (High/Low)
+stop/target checking, 10bps friction each way.
 """
 from __future__ import annotations
 

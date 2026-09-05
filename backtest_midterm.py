@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Middle-ground variant: 2-week (10-trading-day) lookback instead of the
-original 20-day or the failed 5-day/weekly version. Reuses the SAME
-risk-based %-of-equity sizing and position cap as backtest_regime.py (and
-live trading) -- unlike backtest_shortterm.py's custom $3,000/$150-slice
-scheme. Universe includes crypto, carried over from the short-term run.
-Isolated DB, separate from live trading and both prior backtests.
+"""Bracket-exit strategy with a 2-week (10-trading-day) entry window
+instead of 20 days, using the same risk-based percent-of-equity position
+sizing and cap as the live trading engine (see app/risk.py). Universe
+includes crypto. Isolated DB, separate from live trading and other
+backtests.
 """
 from __future__ import annotations
 

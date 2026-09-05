@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
-"""Scale-out variant: tests whether win rate can be raised without gutting
-total profit, using a different mechanism than a flat take-profit cap
-(which we already know cuts total profit ~40-45%, from backtest_notp.py's
-own comparison against the capped versions).
+"""Scale-out variant of the bracket-exit strategy, weighted 75/25 instead
+of 50/50: three-quarters of each position is capped at a +2% partial
+profit target, one-quarter is left uncapped to run with the trend.
 
-Each entry is split into two equal tranches instead of one:
-  - Tranche A takes a modest +3% partial profit if touched (intraday-aware),
-    locking in a realized win on half the position -- this is what should
-    raise the win rate.
-  - Tranche B has NO take-profit, exits only on the -3% stop or a regime
-    flip, exactly like backtest_notp.py -- preserving participation in the
-    rare large trend moves that drove most of that version's profit.
+  - Tranche A (75% of the position) takes a +2% partial profit if touched
+    (checked intraday), locking in a realized win.
+  - Tranche B (25% of the position) has no take-profit and exits only on
+    the -3% stop or a trend reversal.
 
-Both tranches share the same entry price/date and the same -3% stop.
-Same $2,000 total cap (now split $100/$100 per entry instead of $200),
-same 18-symbol universe, same 14 periods, 10bps friction, intraday-aware
-High/Low checking throughout.
+Both tranches share the same entry price/date and the same -3% stop. Same
+mechanics as backtest_scaleout.py, with the split ratio and partial-profit
+target adjusted to test how far win rate can be pushed before profit
+factor breaks down. $2,000 total cap, 18-symbol universe, 14 periods,
+10bps friction, intraday-aware High/Low checking.
 """
 from __future__ import annotations
 

@@ -1,27 +1,17 @@
 #!/usr/bin/env python3
-"""Real day trading: every position opens and closes on the SAME calendar
-day -- zero overnight exposure, unlike every prior strategy tested (all of
-which held positions across multiple days).
+"""Same-day trading strategy: gap-up continuation with a volume-conviction
+filter layered on top.
 
-Honesty on data: true minute-by-minute intraday backtesting only works for
-the last ~60 days from this data source. This design only needs each day's
-Open and Close (available for the full 8 years), so it can be tested
-properly across all 14 periods without that limitation.
+  Trend filter: prior close above its 50-day moving average.
+  Volume filter: the PRIOR day's volume was at least 1.5x its own 20-day
+    average -- elevated interest already building before today's gap.
+    Using the prior day's volume (not today's) avoids lookahead, since
+    today's full-day volume isn't known at the moment of buying the open.
+  Entry: today's Open is at least GAP_THRESHOLD above yesterday's Close,
+    with the volume filter above also satisfied.
+  Exit: always at today's Close.
 
-Strategy: gap-and-go continuation, WITH a volume-conviction filter this time
-(the plain continuation and fade versions traded every gap blindly and both
-lost money -- this tests whether filtering for real conviction fixes that).
-  Trend filter: yesterday's close was above its 50-day SMA (real uptrend).
-  Volume filter: YESTERDAY's volume was >= 1.5x its own 20-day average --
-    elevated interest already building before today's gap. Using yesterday's
-    volume (not today's) avoids lookahead: at the moment of buying today's
-    open, today's full-day volume isn't known yet.
-  Entry: today's Open is >= yesterday's Close + GAP_THRESHOLD (a real gap up),
-    AND the volume filter above.
-  Exit: same day's Close. Always. No exceptions, no overnight hold ever.
-
-Same $2,000 total cap, $200 slices, same 18-symbol universe, same 14
-periods, 10bps friction each way.
+$2,000 total cap, $200 slices, 18-symbol universe, 10bps friction each way.
 """
 from __future__ import annotations
 

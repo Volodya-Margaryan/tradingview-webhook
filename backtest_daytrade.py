@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
-"""Real day trading: every position opens and closes on the SAME calendar
-day -- zero overnight exposure, unlike every prior strategy tested (all of
-which held positions across multiple days).
+"""Same-day trading strategy: every position opens and closes within the
+same calendar day, with zero overnight exposure.
 
-Honesty on data: true minute-by-minute intraday backtesting only works for
-the last ~60 days from this data source. This design only needs each day's
-Open and Close (available for the full 8 years), so it can be tested
-properly across all 14 periods without that limitation.
+Only needs each day's Open and Close, which are available for the full
+multi-year history -- true intraday data is only available for the most
+recent ~60 days from this data source.
 
 Strategy: gap-and-go continuation.
-  Trend filter: yesterday's close was above its 50-day SMA (real uptrend).
-  Entry: today's Open is >= yesterday's Close + GAP_THRESHOLD (a real gap up).
-  Exit: same day's Close. Always. No exceptions, no overnight hold ever.
+  Trend filter: prior close above its 50-day moving average.
+  Entry: today's Open is at least GAP_THRESHOLD above yesterday's Close.
+  Exit: always at today's Close -- no exceptions, no overnight hold.
 
-Same $2,000 total cap, $200 slices, same 18-symbol universe, same 14
-periods, 10bps friction each way (more meaningful here since round trips
-are frequent and daily).
+$2,000 total cap, $200 slices, 18-symbol universe, 10bps friction each way.
 """
 from __future__ import annotations
 

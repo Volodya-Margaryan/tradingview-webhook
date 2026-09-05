@@ -1,25 +1,16 @@
 #!/usr/bin/env python3
-"""Real day trading: every position opens and closes on the SAME calendar
-day -- zero overnight exposure, unlike every prior strategy tested (all of
-which held positions across multiple days).
+"""Same-day trading strategy: the inverse of backtest_daytrade.py's entry --
+buys a gap DOWN instead of a gap up, to test whether buying weakness
+performs differently than chasing strength.
 
-Honesty on data: true minute-by-minute intraday backtesting only works for
-the last ~60 days from this data source. This design only needs each day's
-Open and Close (available for the full 8 years), so it can be tested
-properly across all 14 periods without that limitation.
+  Trend filter: prior close above its 50-day moving average (still only
+    buying dips in names in a broader uptrend).
+  Entry: today's Open is at least GAP_THRESHOLD below yesterday's Close.
+  Exit: always at today's Close -- no exceptions, no overnight hold.
 
-Strategy: gap-down FADE (opposite of backtest_daytrade.py's gap-up-continuation,
-which lost -$693 over 8 years -- testing whether buying weakness works where
-chasing strength didn't).
-  Trend filter: yesterday's close was above its 50-day SMA (real uptrend --
-    still only buying dips in names that are fundamentally going up).
-  Entry: today's Open is <= yesterday's Close - GAP_THRESHOLD (a real gap down).
-  Exit: same day's Close. Always. No exceptions, no overnight hold ever.
-
-Same $2,000 total cap, $200 slices, 10bps friction each way. Universe
-expanded well beyond the original 18 blue chips per explicit request to
-"trade everything" -- adds higher-beta speculative equities and crypto
-(which trades 7 days/week, unlike equities).
+$2,000 total cap, $200 slices, 10bps friction each way. Universe expanded
+beyond large-caps to include speculative equities and crypto (which trades
+7 days a week, unlike equities).
 """
 from __future__ import annotations
 

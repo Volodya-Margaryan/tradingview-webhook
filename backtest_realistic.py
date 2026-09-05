@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-"""'Realistic capital' variant: keeps the ONE strategy parameter set that
-actually showed a positive edge across testing so far (20-day window, 5%
-threshold, SMA20>SMA50 -- both shorter-window variants underperformed it),
-but changes what was actually the complaint: total capital at risk capped
-at $3,000 (not ~$51k cycling through a 1%-of-$100k-equity sizing scheme),
-split into 10 slots of $300 each (mirrors the original 10-position cap,
-just against a real dollar budget instead of equity percentage), a shorter
-3-month test period instead of 6, and a much broader, less-obvious universe
-(small/mid-cap speculative names + altcoins) instead of mostly mega-caps.
-
-Isolated DB, separate from live trading and all three prior backtests.
+"""Bracket-exit strategy (20-day window, 5% threshold, SMA20>SMA50) with
+capital capped at $3,000 total instead of scaling with account equity,
+split into 10 slots of $300 each. Runs over a 3-month period and a broader
+universe that adds small/mid-cap speculative names and altcoins alongside
+the core large-cap universe. Isolated DB, separate from live trading and
+other backtests.
 """
 from __future__ import annotations
 
